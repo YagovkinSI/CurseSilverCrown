@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CurseSilverCrown.Web.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public DbSet<Province> Provinces { get; set; }
 
