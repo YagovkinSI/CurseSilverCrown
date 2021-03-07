@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CurseSilverCrown.Web.Data;
 using CurseSilverCrown.Web.Models;
+using System.Security.Claims;
 
 namespace CurseSilverCrown.Web.Controllers
 {
@@ -22,7 +23,38 @@ namespace CurseSilverCrown.Web.Controllers
         // GET: Provinces
         public async Task<IActionResult> Index()
         {
+            bool buttonTakeVisible = false;
+
+            var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim != null)
+            {
+                var user_Province = _context.User_Province.FirstOrDefault(up => up.UserId == claim.Value);
+                buttonTakeVisible = user_Province == null;
+            }
+
+            ViewBag.ButtonTakeVisible = buttonTakeVisible;
+
             return View(await _context.Provinces.ToListAsync());
+        }
+
+        // GET: Provinces
+        public async Task<IActionResult> Take(int? id)
+        {
+            var claim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            if (id != null && claim != null)
+            {
+                var user_Province = new User_Province()
+                {
+                    UserId = claim.Value,
+                    ProvinceId = id.Value
+                };
+
+                _context.User_Province.Add(user_Province);
+                _context.SaveChanges(); 
+                return RedirectToAction(nameof(Index));
+            }
+
+            return NotFound();
         }
 
         // GET: Provinces/Details/5
