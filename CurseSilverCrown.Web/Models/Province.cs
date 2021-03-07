@@ -9,5 +9,7 @@ namespace CurseSilverCrown.Web.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
+        public User_Province User_Province { get; set; }
     }
 }

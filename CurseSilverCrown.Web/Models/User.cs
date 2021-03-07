@@ -8,5 +8,6 @@ namespace CurseSilverCrown.Web.Models
 {
     public class User : IdentityUser
     {
+        public User_Province User_Province { get; set; }
     }
 }
